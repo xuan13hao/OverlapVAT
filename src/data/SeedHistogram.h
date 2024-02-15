@@ -101,7 +101,7 @@ class SeedHistogram
 	{
 		memset(data_, 0, sizeof(data_));
 		Build_context<_val> context (seqs, *this);
-		launch_scheduled_thread_pool(context, VATConsts::seqp, VATParameters::threads());
+		launch_scheduled_thread_pool(context, VATConsts::seqp, 2*VATParameters::threads());
 	}
 
 	const ShapeHistogram& get(unsigned index_mode, unsigned sid) const
@@ -160,6 +160,7 @@ private:
 
 			assert(i < seqs.get_length());
 			const sequence<const _val> seq = seqs[i];
+			// cout<<"seq = "<<seq<<endl;
 			if(seq.length() < VATConsts::min_shape_len) continue;
 			for(unsigned j=0;j<seq.length()+1-VATConsts::min_shape_len; ++j)
 				for(vector<ShapeConfigures>::const_iterator cfg = cfgs.begin(); cfg != cfgs.end(); ++cfg) {
@@ -170,7 +171,7 @@ private:
 						{
 							// count++;
 							++data_[cfg->mode()][k][seqp][seed_partition(key)];
-							// cout<<"index = "<<count<<", data = "<<****data_<<", model = "<<cfg->mode()<<",k = "<<k<<",seqp = "<<seqp<<", key = "<<seed_partition(key)<<endl;
+							// cout<<"index = "<<", data = "<<****data_<<", model = "<<cfg->mode()<<",k = "<<k<<",seqp = "<<seqp<<", key = "<<seed_partition(key)<<endl;
 						}
 
 				}

@@ -10,6 +10,7 @@
 namespace VATParameters {
 
 string		input_ref_file;
+string	input_subject_file;
 uint32_t	threads_;
 string		database;
 string		query_file;
@@ -72,8 +73,11 @@ bool		spilce;
 bool		chimera;
 bool		whole_genome;
 bool		circ;
+ bool		mini;
 int		seed_len;
-
+bool		simd_sort;
+int		match;
+int		mismatch;
 Aligner_mode aligner_mode;
 Command algn_type;
 

@@ -12,6 +12,7 @@ namespace VATParameters
 {
 
 	extern string	input_ref_file;
+	extern string	input_subject_file;
 	extern uint32_t	threads_;
 	extern string	database;
 	extern string	query_file;
@@ -73,8 +74,11 @@ namespace VATParameters
 	extern bool		chimera;
 	extern bool		whole_genome;
 	extern bool		circ;
+	extern bool		mini;
 	extern int		seed_len;
-
+	extern bool		simd_sort;
+	extern int		match;
+	extern int		mismatch;
 	typedef enum { short_model=0, long_model=1,accuracy_model=3 } Aligner_mode;
 	extern Aligner_mode aligner_mode;
 	typedef enum { invalid=0, makevatdb=1, protein=2, blastx=3, dna=4, view=5 } Command;
@@ -83,6 +87,10 @@ namespace VATParameters
 	inline uint32_t threads()
 	{
 		return std::max(threads_, 1U);
+	}
+	inline uint32_t thread()
+	{
+		return threads()*4;
 	}
 
 	template<typename _t>

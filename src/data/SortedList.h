@@ -70,10 +70,10 @@ class SortedList
 	{
 		TimerTools timer ("Building seed list", false);
 		Build_context<_val> build_context (seqs, sh, range, build_iterators(hst));
-		launch_scheduled_thread_pool(build_context, VATConsts::seqp, 4*VATParameters::threads());
+		launch_scheduled_thread_pool(build_context, VATConsts::seqp, 2*VATParameters::threads());
 		timer.go("Sorting seed list");
 		Sort_context sort_context (*this);
-		launch_scheduled_thread_pool(sort_context, VATConsts::seedp, 4*VATParameters::threads());
+		launch_scheduled_thread_pool(sort_context, VATConsts::seedp, 2*VATParameters::threads());
 	}
 
 	template<typename _t>
@@ -134,6 +134,7 @@ private:
 			if(range.contains(p)) {
 				assert(n[p] < BUFFER_SIZE);
 				// buf[p][n[p]++] = Tuple (key, value);
+				// cout<<"seed_partition_offset(key) = "<<seed_partition_offset(key)<<endl;
 				buf[p][n[p]++] = Tuple (seed_partition_offset(key), value);
 				if(n[p] == BUFFER_SIZE)
 					flush(p);
@@ -321,7 +322,7 @@ private:
 		void operator()(unsigned thread_id ,unsigned seedp) const
 		{
 			int n = sl.ptr_end(seedp) - sl.ptr_begin(seedp) ;
-			if(n >= 8 && ((n != 0) && ((n & (n - 1)) == 0)))
+			if((n >= 8 && ((n != 0) && ((n & (n - 1)) == 0))) && VATParameters::simd_sort)
 			{
 				// cout<<"Using SIMD Sort "<<n<<endl;
 				sl.sortSIMD(sl.ptr_begin(seedp), sl.ptr_end(seedp));

@@ -8,6 +8,7 @@ typedef uint64_t seed;
 
 unsigned seed_partition(seed s)
 {
+	// return s;
 	return s & (VATConsts::seedp-1);
 }
 

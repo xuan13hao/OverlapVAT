@@ -23,8 +23,8 @@ class Hits
 	public:
 	typedef typename packed_sequence_location<_locr>::type packed_loc;
 
-	unsigned	query_;
-	packed_loc	subject_;//reference 
+	unsigned	query_; //query id num
+	packed_loc	subject_;//reference location
 	_locl		seed_offset_;//seed offset
 	Hits():
 		query_ (),
@@ -172,11 +172,11 @@ struct local_match
 		cout << "Score = " << score_ << endl;
 		::print(cout, &query[query_begin_], &subject[subject_begin_], transcript_right_, transcript_left_, buf);
 	}
-	friend std::ostream& operator<<(std::ostream &os, const local_match &x)
+	/*friend std::ostream& operator<<(std::ostream &os, const local_match &x)
 	{
-		os << "(sbj=" << x.subject_range() << " score=" <<x.query_begin_<< ")";
+		os << "(sbj=" << x.subject_range() << " score=" << Scoring<_val>::bitscore(x.score_) << ")";
 		return os;
-	}
+	}*/
 	unsigned len_, query_begin_, subject_len_, gap_openings_, identities_, mismatches_;
 	signed subject_begin_, score_, query_len_, query_anchor_;
 	const _val *subject_;

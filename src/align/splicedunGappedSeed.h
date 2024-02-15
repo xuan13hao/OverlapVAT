@@ -85,15 +85,16 @@ std::vector<DiagonalSeeds<_locr, _locl>> findSpliceSeeds(std::vector<DiagonalSee
         maxIdx[i] = i;
 
         for (int j = 0; j < i; ++j) {
-            int gap = seeds[i].j - seeds[j].j - seeds[j].len;
-            if (gap > maxGap)
-                continue;
-            int splice_score = IsSpliceJunction(seeds[j]) ? -MAX : 0;
+            int gap = seeds[i].j + seeds[i].len - seeds[j].j - seeds[j].len;
+            // if (gap > maxGap)
+            //     continue;
+            // int splice_score = IsSpliceJunction(seeds[j]) ? -MAX : 0;
+            int splice_score = seeds[j].IsSpliceJunction ? -MAX : 0;
             int circ_score = 0;
             if(VATParameters::circ)
             {
-                // cout<<"circ"<<endl;
-               circ_score =  isCandidateBackSplicedJunction(seeds[j])? -MAX : 0;
+                circ_score =  seeds[j].isCandidateBackSplicedJunction ? -MAX : 0;
+            //    circ_score =  isCandidateBackSplicedJunction(seeds[j])? -MAX : 0;
             }
             int score = dp[j] + seeds[i].len+splice_score+circ_score;
             if (score > dp[i]) {
@@ -149,29 +150,16 @@ int gapCost(const DiagonalSeeds<_locr,_locl> &j, const DiagonalSeeds<_locr,_locl
     
 }
 /**
-Use std::string::find as follows:
-
-if (s1.find(s2) != std::string::npos) {
-    std::cout << "found!" << '\n';
-}
-Note: "found!" will be printed if s2 is a substring of s1, both s1 and s2 are of type std::string.
-
 splice juntion GT.........AG 
 */
 template<typename _locr, typename _locl>
 bool IsSpliceJunction(const DiagonalSeeds<_locr,_locl> &i) 
 {
-    // int i_len = i.len,j_len = j.len;
     string ref_seed_i = i.sbj_str;
-    // string ref_seed_j = j.sbj_str;
     bool i_spjunction = false;
-    // bool j_spjunction = false;
     if (ref_seed_i.substr(0, 2) == "GT" && ref_seed_i.substr(ref_seed_i.length() - 2, 2) == "AG") {
             i_spjunction=  true;
     }
-    // if (ref_seed_j.substr(0, 2) == "GT" && ref_seed_j.substr(ref_seed_j.length() - 2, 2) == "AG") {
-    //         j_spjunction=  true;
-    // }
     if(i_spjunction)
     {
         return true;
@@ -204,34 +192,6 @@ bool isCandidateBackSplicedJunction(const DiagonalSeeds<_locr,_locl> &j) {
     }
 
     return false; // Seed does not meet the criteria for a candidate junction
-}
-
-vector<pair<int, int>> find_exons(string sequence) {
-    vector<pair<int, int>> exon_regions; // stores start and end positions of exon regions
-    int seq_length = sequence.length();
-    bool in_exon = false;
-    int exon_start = 0;
-
-    for (int i = 0; i < seq_length; i++) {
-        if (sequence[i] == 'G' && sequence[i+1] == 'T' && sequence[i+2] == 'A' && sequence[i+3] == 'G') {
-            // stop codon, end of exon
-            if (in_exon) {
-                exon_regions.push_back(make_pair(exon_start, i+3));
-                in_exon = false;
-            }
-        } else if (sequence[i] == 'A' && sequence[i+1] == 'T' && sequence[i+2] == 'G') {
-            // start codon, beginning of exon
-            in_exon = true;
-            exon_start = i;
-        }
-    }
-
-    if (in_exon) {
-        // sequence ends in exon
-        exon_regions.push_back(make_pair(exon_start, seq_length-1));
-    }
-
-    return exon_regions;
 }
 
 #endif // __SPLICEDSEED_H__

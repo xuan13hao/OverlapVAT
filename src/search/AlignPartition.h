@@ -42,7 +42,7 @@ void align_range(_locq q_pos,
 		//printf("%u\n",n);
 #endif
 
-	// hf.finish();
+	hf.finish();
 }
 
 template<typename _val, typename _locr, typename _locq, typename _locl>

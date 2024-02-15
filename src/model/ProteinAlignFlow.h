@@ -94,7 +94,7 @@ void ProteinMasterThread(Database_file<_val> &db_file, cpu_timer &timer_mapping,
 
 	timer.finish();
 	// cout << "Total time = " << boost::timer::format(total_timer.elapsed(), 1, "%ws\n");
-	// cout << "Mapping time = " << boost::timer::format(timer_mapping.elapsed(), 1, "%ws\n");
+	cout << "Mapping time = " << boost::timer::format(timer_mapping.elapsed(), 1, "%ws\n");
 	statistics.print();
 }
 

@@ -70,6 +70,7 @@ struct Align_context
 				// case 1:
 					alignQueries<_val,_locr,_locl,1>(query_range.begin, query_range.end, *buffer, st);
 
+					// cout<<"align_queries"<<endl;
 
 				// }
 				queue.push(i);
@@ -79,7 +80,6 @@ struct Align_context
 			}
 		}
 		statistics += st;
-		// cout<<"Align_context"<<endl;
 	}
 	Trace_pt_list<_locr,_locl> &trace_pts;
 	OutputStreamer* output_file;
@@ -96,12 +96,9 @@ void alignQueries(const Trace_pt_buffer<_locr,_locl> &trace_pts, OutputStreamer*
 		log_stream << "Processing query bin " << bin+1 << '/' << trace_pts.bins() << '\n';
 		TimerTools timer ("Loading trace points", false);
 		trace_pts.load(v, bin);
-		int thread_ = 4;//VATParameters::threads()
-		merge_sort(v.begin(), v.end(), 4*VATParameters::threads());
-
-		
+		merge_sort(v.begin(), v.end(), VATParameters::threads());
 		v.init();
-		timer.go("Generating seeds");
+		timer.go("Generating seeds...");
 		if(ref_header.n_blocks > 1) {
 			Align_context<_val,_locr,_locl,Temp_output_buffer<_val> > context (v, output_file);
 			launch_thread_pool(context, VATParameters::threads());

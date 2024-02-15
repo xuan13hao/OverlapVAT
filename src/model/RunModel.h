@@ -4,7 +4,7 @@
 #include "CreateDB.h"
 #include "DNAAlignFlow.h"
 #include "ProteinAlignFlow.h"
-
+#include "MMDNA.h"
 
 class RunModel
 {
@@ -28,7 +28,10 @@ class RunModel
     {
         DNAMasterThread<DNA>();
     }
-
+    void static MM_DNAAlign()
+    {
+        MM_DNA<DNA>();
+    }
     void static ProteinAlign()
     {
         ProteinMasterThread<Protein>();

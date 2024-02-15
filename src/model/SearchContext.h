@@ -55,7 +55,6 @@ void processShapes(unsigned sid,
 	// partition p (VATConsts::seedp, VATParameters::lowmem);
 	::partition p (VATConsts::seedp, VATParameters::lowmem);
 	for(unsigned chunk=0;chunk < p.parts; ++chunk) 
-	// for(unsigned chunk=0;chunk <= 2; ++chunk) 
 	{
 
 		const seedp_range range (p.getMin(chunk), p.getMax(chunk));
@@ -78,10 +77,15 @@ void processShapes(unsigned sid,
 				range);
 		timer.finish();
 
-		timer.go("Merging join...");
+		timer.go("Searching seeds");
 		Search_context<_val,_locr,_locq,_locl> context (sid, ref_idx, query_idx);
-// VATParameters::threads()
-		launch_scheduled_thread_pool(context, VATConsts::seedp, VATParameters::threads());
+		if(VATParameters::algn_type == VATParameters::dna)
+		{
+			launch_scheduled_thread_pool(context, VATConsts::seedp, VATParameters::thread());
+		}else
+		{
+			launch_scheduled_thread_pool(context, VATConsts::seedp, VATParameters::threads());
+		}
 
 	}
 	timer_mapping.stop();
@@ -133,7 +137,7 @@ void ProcessRefsChunks(Database_file<_val> &db_file,
 		out = new OutputStreamer (tmp_file.back());
 	} else
 		out = &master_out.stream();
-	timer.go("Generating Seeds");
+	timer.go("Seeds...");
 	alignQueries<_val,_locr,_locl>(*Trace_pt_buffer<_locr,_locl>::instance, out);
 	delete Trace_pt_buffer<_locr,_locl>::instance;
 

@@ -67,7 +67,7 @@ class Output_buffer : public Text_buffer
 		unsigned query_id,
 		const vector<char> &transcript_buf)
 	{ 
-		// cout<<"query_id ="<<query_id<<"	"<<match.traceback_->query_begin_<<"	"<<match.traceback_->query_begin_+match.traceback_->query_len_<<"	"<<"subject id = "<<"	"<<match.subject_id_<<"	"<<match.traceback_->subject_begin_<<"	"<<match.traceback_->subject_begin_+match.traceback_->subject_len_<<endl;
+		// cout<<"print_match 1"<<endl;
 		VATOutput::write_record(*this, match, query_source_len, query, query_id, transcript_buf); 
 		// cout<<"print_match 2"<<endl;
 	}

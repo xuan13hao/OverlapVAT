@@ -36,8 +36,7 @@ class Masked_sequence_set : public SequenceSet<_val>
 
 		timer.go("Building position filter");
 		Build_context<_loc> build_context(idx, sid, counts, *this);
-		// launch_scheduled_thread_pool(build_context, VATConsts::seedp, VATParameters::threads());
-		launch_scheduled_thread_pool(build_context, VATConsts::seedp, 8);
+		launch_scheduled_thread_pool(build_context, VATConsts::seedp, VATParameters::threads());
 		timer.finish();
 		log_stream << "Masked positions = " << std::accumulate(counts.begin(), counts.end(), 0) << std::endl;
 	}

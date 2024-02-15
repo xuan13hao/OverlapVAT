@@ -63,18 +63,18 @@ class View_context
 
 				for(unsigned j=0;j<query_buf.n;++j) {
 					VATQueryRecord<_val> r (daa, query_buf.buf[j]);
-					// cout<<"format print 1"<<endl;
+					cout<<"format print 1"<<endl;
 					for(typename VATQueryRecord<_val>::Match_iterator i = r.begin(); i.good(); ++i) 
 					{
-						// cout<<"format print 2" <<endl;
+						cout<<"format print 2" <<endl;
 
 						if(i->frame > 2 && VATParameters::forwardonly)
 							continue;
-						// cout<<"format print 3"<<endl;
+						cout<<"format print 3"<<endl;
 
 						format.print_match(*i, *buffer);
 
-						// cout<<"format print 4"<<endl;
+						cout<<"format print 4"<<endl;
 					}
 				}
 				queue.push(n);
@@ -101,20 +101,22 @@ void view(VATFile &daa)
 					daa.mismatch_penalty(),
 					_val ()));
 
-	// cout << "Build version = " << daa.diamond_build() << endl;
-	// cout << "DB sequences = " << daa.db_seqs() << endl;
-	// cout << "DB sequences used = " << daa.db_seqs_used() << endl;
-	// cout << "DB letters = " << daa.db_letters() << endl;
+	cout << "Build version = " << daa.diamond_build() << endl;
+	cout << "DB sequences = " << daa.db_seqs() << endl;
+	cout << "DB sequences used = " << daa.db_seqs_used() << endl;
+	cout << "DB letters = " << daa.db_letters() << endl;
 
 	View_writer writer;
+	cout<<"Output_format...1"<<endl;
 	const Output_format<_val>& format (get_output_format<_val>());
+	cout<<"Output_format...2"<<endl;
 	format.print_header(writer.f_);
-
+cout<<"Output_format...3"<<endl;
 	View_context<_val> context (daa, writer, format);
-	// cout<<"View_context..."<<endl;
+	cout<<"View_context...1"<<endl;
 
 	launch_thread_pool(context, VATParameters::threads());
-// cout<<"View_context..."<<endl;
+cout<<"View_context...2"<<endl;
 
 }
 
